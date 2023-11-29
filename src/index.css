@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/*  General Styles  */
+body {
+    /*  Light theme */
+    @apply bg-light-900;
+    @apply text-dark-900;
+    /*  Dark theme  */
+    @apply dark:bg-dark-900;
+    @apply dark:text-light-900;
+}
+
+h2 {
+    @apply      text-dark-700;   /*  Light theme */
+    @apply dark:text-light-700; /*  Dark theme  */
+}
+
+.no-select {
+    /* Disable text selection: https://github.com/SebLague/SebLague.github.io/blob/master/ideagenerator/stylesheet.css */
+
+	touch-action: manipulation;
+	/* Disable text selection: https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting */
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Chrome, Opera and Firefox */
+}
+
+/*  Game Styles */
+.game-grid {
+    @apply      bg-light-400;
+    @apply dark:bg-dark-400;
+    @apply w-11/12;
+    @apply p-3;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+.grid-cell {
+    @apply      bg-light-600;
+    @apply dark:bg-dark-600;
+    @apply flex flex-col content-center justify-center;
+
+    border-radius: 3px;
+    aspect-ratio: 1;
+}
