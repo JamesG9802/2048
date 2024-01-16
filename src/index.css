@@ -44,7 +44,67 @@ h2 {
     @apply      bg-light-600;
     @apply dark:bg-dark-600;
     @apply flex flex-col content-center justify-center;
-
+    @apply text-5xl;
+    @apply font-bold;
     border-radius: 3px;
     aspect-ratio: 1;
+}
+
+/*
+    Based on the styles from https://github.com/gabrielecirulli/2048/blob/master/style/main.css
+*/
+
+.tile-2 {
+    @apply text-tiletext-2;
+    @apply bg-tilebg-2;
+}
+.tile-4 {
+    @apply text-tiletext-4;
+    @apply bg-tilebg-4;
+}
+.tile-8 {
+    @apply text-tiletext-8;
+    @apply bg-tilebg-2048;
+}
+.tile-16 {
+    @apply text-tiletext-16;
+    @apply bg-tilebg-16;
+}
+.tile-32 {
+    @apply text-tiletext-32;
+    @apply bg-tilebg-32;
+}
+.tile-64 {
+    @apply text-tiletext-64;
+    @apply bg-tilebg-64;
+}
+.tile-128 {
+    @apply text-tiletext-128;
+    @apply bg-tilebg-128;
+    @apply text-4xl;
+}
+.tile-256 {
+    @apply text-tiletext-256;
+    @apply bg-tilebg-256;
+    @apply text-4xl;
+}
+.tile-512 {
+    @apply text-tiletext-512;
+    @apply bg-tilebg-512;
+    @apply text-4xl;
+}
+.tile-1024 {
+    @apply text-tiletext-1024;
+    @apply bg-tilebg-1024;
+    @apply text-3xl;
+}
+.tile-2048 {
+    @apply text-tiletext-2048;
+    @apply bg-tilebg-2048;
+    @apply text-3xl;
+}
+.tile-4096 {
+    @apply text-tiletext-4096;
+    @apply bg-tilebg-4096;
+    @apply text-2xl;
 }
