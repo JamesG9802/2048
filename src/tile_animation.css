@@ -1,0 +1,53 @@
+/*
+let directions = ['up', 'right', 'down', 'left'];
+let outputcss = "";
+for(let i = 0; i < directions.length; i++) {
+    for(let j = 1; j <= 3; j++) {
+        let string = ".move-" + directions[i] + j + " { animation: move-" + directions[i] + j + " .1s linear 0s forwards normal;}\n" +
+            "@keyframes move-" + directions[i] + j + " { 0% { transform: translate(0,0); } 100% { transform: translate(";
+        if(i % 2 == 0) {
+            string += "0,";
+            if(i == 0) {
+                string += (-112 * j) + "%);}}"; 
+            }
+            else {
+                string += (112 * j) + "%);}}"; 
+            }
+        }
+        else {
+            if(i == 1) {
+                string += (112 * j) + "%,0);}}"; 
+            }
+            else {
+                string += (-112 * j) + "%,0);}}"; 
+            }
+        }
+        outputcss += string + "\n";
+    }
+}
+console.log(outputcss);
+*/
+.move-up1 { animation: move-up1 .1s linear 0s forwards normal;}
+@keyframes move-up1 { 0% { transform: translate(0,0); } 100% { transform: translate(0,-113%);}}
+.move-up2 { animation: move-up2 .1s linear 0s forwards normal;}
+@keyframes move-up2 { 0% { transform: translate(0,0); } 100% { transform: translate(0,-226%);}}
+.move-up3 { animation: move-up3 .1s linear 0s forwards normal;}
+@keyframes move-up3 { 0% { transform: translate(0,0); } 100% { transform: translate(0,-339%);}}
+.move-right1 { animation: move-right1 .1s linear 0s forwards normal;}
+@keyframes move-right1 { 0% { transform: translate(0,0); } 100% { transform: translate(113%,0);}}
+.move-right2 { animation: move-right2 .1s linear 0s forwards normal;}
+@keyframes move-right2 { 0% { transform: translate(0,0); } 100% { transform: translate(226%,0);}}
+.move-right3 { animation: move-right3 .1s linear 0s forwards normal;}
+@keyframes move-right3 { 0% { transform: translate(0,0); } 100% { transform: translate(339%,0);}}
+.move-down1 { animation: move-down1 .1s linear 0s forwards normal;}
+@keyframes move-down1 { 0% { transform: translate(0,0); } 100% { transform: translate(0,113%);}}
+.move-down2 { animation: move-down2 .1s linear 0s forwards normal;}
+@keyframes move-down2 { 0% { transform: translate(0,0); } 100% { transform: translate(0,226%);}}
+.move-down3 { animation: move-down3 .1s linear 0s forwards normal;}
+@keyframes move-down3 { 0% { transform: translate(0,0); } 100% { transform: translate(0,339%);}}
+.move-left1 { animation: move-left1 .1s linear 0s forwards normal;}
+@keyframes move-left1 { 0% { transform: translate(0,0); } 100% { transform: translate(-113%,0);}}
+.move-left2 { animation: move-left2 .1s linear 0s forwards normal;}
+@keyframes move-left2 { 0% { transform: translate(0,0); } 100% { transform: translate(-226%,0);}}
+.move-left3 { animation: move-left3 .1s linear 0s forwards normal;}
+@keyframes move-left3 { 0% { transform: translate(0,0); } 100% { transform: translate(-339%,0);}}

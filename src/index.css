@@ -18,6 +18,31 @@ h2 {
     @apply dark:text-light-700; /*  Dark theme  */
 }
 
+a {
+    text-decoration: underline;
+}
+a:hover {
+    /*  Light theme */
+    @apply text-dark-500;
+    /*  Dark theme  */
+    @apply dark:text-light-500;
+}
+button {
+    @apply bg-light-700;
+    @apply dark:bg-dark-700;
+    @apply p-3;
+    @apply m-2;
+    
+    border: 2px solid;
+    border-radius: 5px;
+}
+button:hover {
+    @apply bg-light-500;
+    @apply dark:bg-dark-500;
+
+    transition: ease-in-out 0.1s;
+}
+
 .no-select {
     /* Disable text selection: https://github.com/SebLague/SebLague.github.io/blob/master/ideagenerator/stylesheet.css */
 
@@ -50,6 +75,19 @@ h2 {
     aspect-ratio: 1;
 }
 
+.tile-new {
+    animation: appear .25s ease-in-out 0s forwards normal;
+}
+@keyframes appear {
+    0% {
+        opacity: 0%;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 100%;
+        transform: scale(1);
+    }
+}
 /*
     Based on the styles from https://github.com/gabrielecirulli/2048/blob/master/style/main.css
 */
