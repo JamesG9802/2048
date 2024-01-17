@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GameInfo, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, get_movable_tiles, get_valid_moves, initialize, is_lost, make_move } from "./scripts/GameLogic";
 import './tile_animation.css'
 
@@ -12,18 +12,26 @@ export interface MovingTile {
 
 //  Styling based off Gabriele Cirulli's 2048 at https://play2048.co/
 export function GameContainer(): JSX.Element {
-    const [num_moves_made, set_num_moves_made] = useState(0);
     const [game_info, set_game_info] = useState(initialize());
     const [moving_tiles, set_moving_tiles] = useState([] as MovingTile[]);
+    const running = useRef(false);
+    const should_reset = useRef(false);
 
-    function animated_make_move(game_info: GameInfo, direction: number) {
-        set_num_moves_made(num_moves_made + 1);
+    function animated_make_move(game_info: GameInfo, direction: number, 
+        callback?: (c_game_info: GameInfo) => void) {
+        if(game_info.locked) return;
+        game_info.locked = true;
         //  chooses affected tiles to visually move
         set_moving_tiles(get_movable_tiles(game_info, direction));
         //  actually sets the board to after the move
         setTimeout(()=>{
-            set_game_info(make_move(game_info, direction));
+            let new_game_info: GameInfo = make_move(game_info, direction);
+            new_game_info.locked = false; 
+            set_game_info(new_game_info);
             set_moving_tiles([]);
+            if(callback != undefined) {
+                callback(new_game_info);
+            }
         }, 90);
     } 
 
@@ -69,7 +77,7 @@ export function GameContainer(): JSX.Element {
 
     return (
         <>
-            <p className="text-2xl font-bold p-5">Number of moves made: {num_moves_made}</p>
+            <p className="text-2xl font-bold p-5">Number of moves made: {game_info.moves_made}</p>
 
             <div tabIndex={0} onKeyDown={(e)=>{
                 if(e.key == 'w') {
@@ -91,11 +99,38 @@ export function GameContainer(): JSX.Element {
             </div>
             
             <button className="no-select" onClick={()=>{
-                console.log(get_valid_moves(game_info));
-            }}>Play Random Moves</button>
+                function random_move(game_info: GameInfo){
+                    const valid_moves: number[] = get_valid_moves(game_info);
+                    if(!is_lost(game_info) && running.current)
+                    {
+                        animated_make_move(game_info, 
+                            valid_moves[Math.floor(Math.random() * valid_moves.length)],
+                            random_move);
+                    }
+                    else {
+                        running.current = false;
+                        if(should_reset.current)
+                            set_game_info(initialize());
+                        should_reset.current = false;
+                    }
+                }
+                if(running.current)
+                {
+                    running.current = false;
+                }
+                else {
+                    running.current = true;
+                    random_move(game_info);
+                }
+                
+            }}>{!running.current ? 'Play Random Moves' : 'Stop'}</button>
             <button className="no-select" onClick={()=>{
+                if(running.current)
+                {
+                    running.current = false;
+                    should_reset.current = true;
+                }
                 set_game_info(initialize());
-                set_num_moves_made(0);
             }}>Reset</button>
         </>
     );

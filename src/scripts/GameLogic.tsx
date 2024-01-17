@@ -13,7 +13,16 @@ export interface GameInfo {
      * A 1D array representing each tile of a 2048 game.
      */
     board: number[],
+
+    /**
+     * Index of tile that was just added.
+     */
     new_tile: number,
+
+    moves_made: number,
+
+    locked?: boolean,
+
 };
 
 /**
@@ -28,7 +37,9 @@ export function initialize(): GameInfo {
     ]
     let game_info: GameInfo = {
         board: new_board,
-        new_tile: -1
+        new_tile: -1,
+        locked: false,
+        moves_made: 0
     }
     
     //  Add two starting tiles
@@ -45,7 +56,9 @@ export function initialize(): GameInfo {
 export function clone(game_info: GameInfo): GameInfo {
     return {
         board: [...game_info.board],
-        new_tile: game_info.new_tile
+        new_tile: game_info.new_tile,
+        locked: game_info.locked,
+        moves_made: game_info.moves_made
     }
 }
 
@@ -111,11 +124,23 @@ export function is_lost(game_info: GameInfo): boolean {
         let right_neighbor = i + 1;
         
         //  bounds check; because i is always within [0, length -1], 
-        //it is safe to leave the neighbors out of bounds when comparing
-        if(up_neighbor >= 0) up_neighbor = game_info.board[up_neighbor];
-        if(down_neighbor < game_info.board.length) down_neighbor = game_info.board[down_neighbor];
-        if(left_neighbor >= 0) left_neighbor = game_info.board[left_neighbor];
-        if(right_neighbor < game_info.board.length) right_neighbor = game_info.board[right_neighbor];
+        //  it is safe to leave the neighbors out of bounds when comparing
+        if(up_neighbor >= 0)
+            up_neighbor = game_info.board[up_neighbor];
+        else 
+            up_neighbor = -1;
+        if(down_neighbor < game_info.board.length)
+            down_neighbor = game_info.board[down_neighbor];
+        else
+            down_neighbor = -1;
+        if(left_neighbor >= 0 && Math.floor(left_neighbor / 4) == Math.floor(i / 4)) 
+            left_neighbor = game_info.board[left_neighbor];
+        else 
+            left_neighbor = -1;
+        if(right_neighbor < game_info.board.length && Math.floor(right_neighbor / 4) == Math.floor(i / 4)) 
+            right_neighbor = game_info.board[right_neighbor];
+        else 
+            right_neighbor = -1;
         
         const value = game_info.board[i];
         if(value == up_neighbor || value == down_neighbor || value == left_neighbor || value == right_neighbor) {
@@ -237,6 +262,7 @@ export function make_move(game_info: GameInfo, direction: number): GameInfo {
     }
 
     if(valid_move_made && !is_lost(new_game_info)) {
+        new_game_info.moves_made += 1;
         new_game_info = add_random_tile(new_game_info);
     }
     else {
