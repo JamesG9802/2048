@@ -102,7 +102,7 @@ button:hover {
 }
 .tile-8 {
     @apply text-tiletext-8;
-    @apply bg-tilebg-2048;
+    @apply bg-tilebg-8;
 }
 .tile-16 {
     @apply text-tiletext-16;

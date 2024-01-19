@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { GameInfo, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, get_movable_tiles, get_valid_moves, initialize, is_lost, make_move } from "./scripts/GameLogic";
+import { useRef, useState } from "react";
+import { GameInfo, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, get_movable_tiles, get_valid_moves, initialize, is_lost, make_move_and_add_tile } from "./scripts/GameLogic";
 import './tile_animation.css'
 
 
@@ -25,7 +25,7 @@ export function GameContainer(): JSX.Element {
         set_moving_tiles(get_movable_tiles(game_info, direction));
         //  actually sets the board to after the move
         setTimeout(()=>{
-            let new_game_info: GameInfo = make_move(game_info, direction);
+            let new_game_info: GameInfo = make_move_and_add_tile(game_info, direction);
             new_game_info.locked = false; 
             set_game_info(new_game_info);
             set_moving_tiles([]);

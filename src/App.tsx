@@ -1,6 +1,8 @@
 import { GameContainer } from "./Game";
 import benh_tiles from './images/benh_tiles.png';
 import random_moves_graph from './images/Random Moves Made.svg'
+import perfect_loss from './images/perfect_loss.png'
+import minmax_moves_graph from './images/Minmax Moves Made.svg'
 
 function Header(): JSX.Element  {
   return (
@@ -27,18 +29,35 @@ function Content(): JSX.Element  {
         Winning the game at this point is pretty easy at this point. 
       </p>
       <h1 className="text-3xl font-bold p-3">But what about losing?</h1>
-      <p>
+      <p className="text-justify">
         Losing specifically is not difficult to accomplish. You could after all just play moves completely randomly.
         Benh on <a href="https://math.stackexchange.com/a/727204">StackExchange</a> posted a sample of one million games played randomly. 
         Not a single game managed to combine a tile to 1024.
       </p>
       <img className="p-3" src={benh_tiles}/>
-      <p>
+      <p className="text-justify">
         It is, however, surprising how long it takes to actually lose just playing random games.
         You can try it yourself by using WASD, the arrow keys, or by clicking the button to play random moves automatically.
       </p>
       <GameContainer></GameContainer>
+      <p className="text-justify p-3">
+        Running 100,000 games of 2048 with moves chosen randomly results in a high number of moves on average needed to lose the game: ~118 moves. 
+      </p>
       <img className="p-3" src={random_moves_graph}/>
+      <p className="text-justify p-3">
+        There are 16 tiles in 2048 that all need to be filled up for the game to be lost. 
+        2048 starts with 2 tiles already placed randomly on the board. 
+        New tiles are placed after a move is made to shift the tiles.
+        Assuming that you were perfectly lucky, that you need at minimum 12 moves to lose the game.
+      </p>
+      <img className="p-3" src={perfect_loss}/>
+      <h1 className="text-3xl font-bold p-3">Minmax Approach</h1>
+      <p className="text-justify">
+        A better approach to finding the fastest loss would be to use a more algorithmic solution. 
+        Minimax is an algorithm that minimizes losing scenarios and maximizes winning scenarios.
+        In our case, a good move is one that reduces the number of empty spaces and minimizes the number of equivalent adjacent tiles.
+      </p>
+      <img className="p-3" src={minmax_moves_graph}/>
     </>
   );
 }

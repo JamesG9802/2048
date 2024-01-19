@@ -63,7 +63,7 @@ export function clone(game_info: GameInfo): GameInfo {
 }
 
 /**
- * Returns a list of available tile indices. An empty array is returned if no tiles are available.
+ * Returns a list of available, or empty, tile indices. An empty array is returned if no tiles are available.
  */
 export function get_available_tiles(game_info: GameInfo): number[]  {
     let available_tiles: number[] = [];
@@ -94,13 +94,28 @@ export function get_random_available_tile(game_info: GameInfo): number {
  */
 export function add_random_tile(game_info: GameInfo): GameInfo {
     if(get_available_tiles(game_info).length != 0) {
-        let cell_value: number = Math.random() < 0.9 ? 2 : 4;
-        let cell_index: number = get_random_available_tile(game_info);
-        game_info.board[cell_index] = cell_value;
-        game_info.new_tile = cell_index;
+        let tile_value: number = Math.random() < 0.9 ? 2 : 4;
+        let tile_index: number = get_random_available_tile(game_info);
+        game_info.board[tile_index] = tile_value;
+        game_info.new_tile = tile_index;
     }
     else {
         console.error("Can't add a random tile.");
+    }
+    return clone(game_info);
+}
+
+/**
+ * Mimics the functionality of adding a random tile, but with the exact position and tile value specified.
+ * @param game_info 
+ */
+export function set_random_tile(game_info: GameInfo, tile_value: number, tile_index: number): GameInfo {
+    if(get_available_tiles(game_info).length != 0) {
+        game_info.board[tile_index] = tile_value;
+        game_info.new_tile = tile_index;
+    }
+    else {
+        console.error("Trying to set a tile that is not empty");
     }
     return clone(game_info);
 }
@@ -190,12 +205,12 @@ export function get_valid_moves(game_info: GameInfo): number[] {
  * Makes a move on the game and returns the updated game.
  * @param game_info 
  * @param direction the direction the tiles will shift to.
- * @returns 
+ * @returns the game info and whether the move made was valid
  */
-export function make_move(game_info: GameInfo, direction: number): GameInfo {
+export function make_move(game_info: GameInfo, direction: number): [GameInfo, boolean] {
     if(direction != MOVE_UP && direction != MOVE_RIGHT && direction != MOVE_DOWN && direction != MOVE_LEFT) {
         console.error("Invalid direction:", direction);
-        return clone(game_info);
+        return [clone(game_info), false];
     }
     let new_game_info: GameInfo = clone(game_info);
 
@@ -261,16 +276,31 @@ export function make_move(game_info: GameInfo, direction: number): GameInfo {
         }
     }
 
-    if(valid_move_made && !is_lost(new_game_info)) {
+    if(valid_move_made) {
         new_game_info.moves_made += 1;
+    }
+    return [new_game_info, valid_move_made];
+}
+/**
+ * Makes a move on the game and returns the updated game with a random tile added.
+ * @param game_info 
+ * @param direction the direction the tiles will shift to.
+ * @returns 
+ */
+export function make_move_and_add_tile(game_info: GameInfo, direction: number): GameInfo {
+    let result: [GameInfo, boolean] = make_move(game_info, direction);
+    let new_game_info: GameInfo = result[0];
+    let valid_move_made: boolean = result[1];
+
+    if(valid_move_made && get_available_tiles(new_game_info).length != 0) {
         new_game_info = add_random_tile(new_game_info);
     }
     else {
-        console.log("Cannot add a new tile.");
+        console.log("Cannot add a new tile.", valid_move_made, direction, get_available_tiles(new_game_info).length, game_info.board, new_game_info.board);
     }
+
     return new_game_info;
 }
-
 /**
  * Returns a list of tiles that can move in the indicated direction.
  * @param game_info 
