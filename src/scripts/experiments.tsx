@@ -1,5 +1,5 @@
 import { minimax, random_move } from "./AntiSolver.tsx";
-import { GameInfo, clone, get_available_tiles, get_valid_moves, initialize, is_lost, make_move, make_move_and_add_tile, set_random_tile } from "./GameLogic.tsx";
+import { GameInfo, initialize, is_lost, make_move_and_add_tile } from "./GameLogic.tsx";
 
 import fs from "fs";
 
@@ -69,5 +69,5 @@ function minimax_game_analysis(num_games: number, max_depth: number) {
     write_data_to_file(data, './minimax.csv');
 }
 
-//  random_move_game_analysis(100000);
-// minimax_game_analysis(100, 5);
+random_move_game_analysis(100000);
+minimax_game_analysis(100, 5);

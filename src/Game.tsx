@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import { GameInfo, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, get_movable_tiles, initialize, is_lost, make_move_and_add_tile } from "./scripts/GameLogic";
 import './tile_animation.css'
-import { minimax_move, random_move } from "./scripts/AntiSolver";
-
 
 export interface MovingTile {
     index: number,
