@@ -61,9 +61,22 @@ button:hover {
     @apply dark:bg-dark-400;
     @apply w-11/12;
     @apply p-3;
+    position: relative;
     margin: 0 auto;
     border-radius: 6px;
     box-sizing: border-box;
+}
+.game-grid-overlay {
+    @apply flex flex-col content-center justify-center;
+    @apply text-5xl;
+    @apply font-bold;
+    @apply bg-light-600;
+    @apply bg-opacity-60;
+    position: absolute;
+    left: 0; right: 0;
+    top: 0; bottom: 0;
+    z-index: 5;
+    animation: appear .25s ease-in-out 0s forwards normal;
 }
 .grid-cell {
     @apply      bg-light-600;
@@ -88,10 +101,10 @@ button:hover {
         transform: scale(1);
     }
 }
+
 /*
     Based on the styles from https://github.com/gabrielecirulli/2048/blob/master/style/main.css
 */
-
 .tile-2 {
     @apply text-tiletext-2;
     @apply bg-tilebg-2;

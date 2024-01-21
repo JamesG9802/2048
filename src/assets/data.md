@@ -6,7 +6,7 @@ A minmax algorithm can be used as a solver, the only question is how to define t
 Upon examining the 'perfect' game, it appears that good moves should be those that reduce the number of empty tiles and 
 reduce the number of tiles with neighbors of equal value or,
 
-w1 * # of empty tiles + w2 * # of equal neigbors.
+w1 * # of occupied tiles + w2 * # of equal neigbors.
 
 A series of different weight combinations were experimented with:
 - w1 = 1,   w2 = 1

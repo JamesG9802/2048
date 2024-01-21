@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
-import { GameInfo, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, get_movable_tiles, get_valid_moves, initialize, is_lost, make_move_and_add_tile } from "./scripts/GameLogic";
+import { GameInfo, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, get_movable_tiles, initialize, is_lost, make_move_and_add_tile } from "./scripts/GameLogic";
 import './tile_animation.css'
+import { minimax_move, random_move } from "./scripts/AntiSolver";
 
 
 export interface MovingTile {
@@ -11,7 +12,7 @@ export interface MovingTile {
 
 
 //  Styling based off Gabriele Cirulli's 2048 at https://play2048.co/
-export function GameContainer(): JSX.Element {
+export function GameContainer({move_chooser}: {move_chooser: (game_info: GameInfo)=> number}): JSX.Element {
     const [game_info, set_game_info] = useState(initialize());
     const [moving_tiles, set_moving_tiles] = useState([] as MovingTile[]);
     const running = useRef(false);
@@ -95,17 +96,20 @@ export function GameContainer(): JSX.Element {
             }}className="game no-select">
                 <div className="game-grid grid grid-cols-4 gap-3 content-center">
                     {board}
+                    {is_lost(game_info) ? 
+                        <div className="game-grid-overlay">Game over!</div>
+                        : ''}
                 </div>
             </div>
             
             <button className="no-select" onClick={()=>{
-                function random_move(game_info: GameInfo){
-                    const valid_moves: number[] = get_valid_moves(game_info);
+                function make_move(game_info: GameInfo){
+                    const chosen_move: number = move_chooser(game_info);
                     if(!is_lost(game_info) && running.current)
                     {
                         animated_make_move(game_info, 
-                            valid_moves[Math.floor(Math.random() * valid_moves.length)],
-                            random_move);
+                            chosen_move,
+                            make_move);
                     }
                     else {
                         running.current = false;
@@ -120,10 +124,10 @@ export function GameContainer(): JSX.Element {
                 }
                 else {
                     running.current = true;
-                    random_move(game_info);
+                    make_move(game_info);
                 }
                 
-            }}>{!running.current ? 'Play Random Moves' : 'Stop'}</button>
+            }}>{!running.current ? 'Play' : 'Stop'}</button>
             <button className="no-select" onClick={()=>{
                 if(running.current)
                 {
