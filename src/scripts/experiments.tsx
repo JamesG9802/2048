@@ -29,7 +29,7 @@ function write_data_to_file(data: Data, file_path: string) {
  * Simulates a number of games of 2048 played randomly.
  * @param num_games 
  */
-export function random_move_game_analysis(num_games: number) {
+function random_move_game_analysis(num_games: number) {
     let data: Data = {moves_made: []};
 
     for(let game = 0; game < num_games; game++) {
@@ -54,20 +54,34 @@ export function random_move_game_analysis(num_games: number) {
  */
 function minimax_game_analysis(num_games: number, max_depth: number) {
     let data: Data = {moves_made: []};
+    const start: number = performance.now();
     for(let game = 0; game < num_games; game++) {
         let game_info: GameInfo = initialize();
         
         //  Play the best move chosen by the minimax algorithm
-        if(game % 10 == 0) console.log(game);
+        if(game % 100 == 0) console.log(game);
         
         while(!is_lost(game_info)) {
-            let evaluation: [number, number] = minimax(game_info, max_depth, true, 0);
+            let evaluation: [number, number] = minimax(game_info, max_depth, true, 0, Number.MIN_VALUE, Number.MAX_VALUE);
             game_info = make_move_and_add_tile(game_info, evaluation[1]);
         }
         data.moves_made.push(game_info.moves_made);
     }
+    const end: number = performance.now();
+    console.log(`Time to complete ${num_games} games with max depth of ${max_depth}: ${end - start} milliseconds.`);
     write_data_to_file(data, './minimax.csv');
 }
 
-random_move_game_analysis(100000);
-minimax_game_analysis(100, 5);
+/**
+ * Uses a gradient descent search to find the locally optimal parameters for minimax.
+ * @param num_games 
+ * @param max_depth 
+ * @param max_generations 
+ * @returns an array of numbers representing the weights and bias of the minimax algorithm.
+ */
+function tune_minimax_parameters(num_games: number, max_depth: number, max_generations: number): number[] {
+    return [];
+}
+
+// random_move_game_analysis(100000);
+minimax_game_analysis(1000, 5);

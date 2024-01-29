@@ -1,4 +1,4 @@
-import { GameInfo, clone, get_available_tiles, get_valid_moves, is_lost, make_move, set_random_tile } from "./GameLogic";
+import { GameInfo, clone, get_available_tiles, get_valid_moves, is_lost, make_move, set_random_tile } from "./GameLogic.tsx";
 
 /**
  * Returns a random valid move for a game.
@@ -74,9 +74,12 @@ function minimax_evaluation(game_info: GameInfo): number {
  * @param depth 
  * @param is_maximizer 
  * @param move the move chosen by the maximizer
+ * @param alpha the best score by the maximizer
+ * @param beta the best score by the minimizer
  * @returns the evaluation score and the corresponding move that should be played.
  */
-export function minimax(current_game: GameInfo, depth: number, is_maximizer: boolean, move: number): [number, number] {
+export function minimax(current_game: GameInfo, depth: number, is_maximizer: boolean, move: number,
+alpha: number, beta: number): [number, number] {
     if(depth == 0 || is_lost(current_game))
         return [minimax_evaluation(current_game), move];
     if(is_maximizer) {
@@ -92,15 +95,17 @@ export function minimax(current_game: GameInfo, depth: number, is_maximizer: boo
             //  When minimax is invoked, move is by default 0
             let evaluation: [number, number];
             if(move == 0)
-                evaluation = minimax(after_move_game, depth - 1, false, valid_moves[i]);
+                evaluation = minimax(after_move_game, depth - 1, false, valid_moves[i], alpha, beta);
             else
-                evaluation = minimax(after_move_game, depth - 1, false, move);
-
+                evaluation = minimax(after_move_game, depth - 1, false, move, alpha, beta);
             if(evaluation[0] > max_evaluation)
             {
                 max_evaluation = evaluation[0];
                 max_move = evaluation[1];   
             }
+            alpha = Math.max(alpha, max_evaluation);
+            if(beta <= alpha)
+                break;
         }
         return [max_evaluation, max_move];
     }
@@ -117,8 +122,8 @@ export function minimax(current_game: GameInfo, depth: number, is_maximizer: boo
             after_move_game_2 = set_random_tile(after_move_game_2, 2, empty_tiles_indices[i]);
             after_move_game_4 = set_random_tile(after_move_game_4, 4, empty_tiles_indices[i]);
 
-            let evaluation_2 = minimax(after_move_game_2, depth - 1, true, move);
-            let evaluation_4 = minimax(after_move_game_4, depth - 1, true, move);
+            let evaluation_2 = minimax(after_move_game_2, depth - 1, true, move, alpha, beta);
+            let evaluation_4 = minimax(after_move_game_4, depth - 1, true, move, alpha, beta);
 
             if(evaluation_2[0] < min_evaluation) {
                 min_evaluation = evaluation_2[0];
@@ -128,6 +133,9 @@ export function minimax(current_game: GameInfo, depth: number, is_maximizer: boo
                 min_evaluation = evaluation_4[0];
                 min_move = evaluation_4[1];
             }
+            beta = Math.min(min_evaluation, beta);
+            if (beta <= alpha)
+                break;
         }
         return [min_evaluation, min_move];
     }
@@ -135,8 +143,19 @@ export function minimax(current_game: GameInfo, depth: number, is_maximizer: boo
 
 /**
  * Returns a valid move chosen by a minmax search
+ * https://en.wikipedia.org/wiki/Minimax
  * @param game_info 
  */
 export function minimax_move(game_info: GameInfo, max_depth?: number): number {
-    return minimax(game_info, max_depth != undefined ? max_depth : 5, true, 0)[1];
+    return minimax(game_info, max_depth != undefined ? max_depth : 5, true, 0, Number.MIN_VALUE, Number.MAX_VALUE)[1];
 }
+
+/**
+ * 
+ * @param game_info 
+ * @param max_depth 
+ 
+export function tuned_minimax_move(game_info: GameInfo, max_depth?: number): number {
+    
+}
+*/

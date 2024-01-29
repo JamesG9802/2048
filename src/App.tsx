@@ -73,8 +73,7 @@ function Content(): JSX.Element  {
       </p>
       <GameContainer move_chooser={minimax_move}></GameContainer>
       <p className="text-justify">
-        The values of <MathJax inline hideUntilTypeset={"first"}>{`\\(w_{1}\\)`}</MathJax> 
-        and <MathJax inline hideUntilTypeset={"first"}>{`\\(w_{2}\\)`}</MathJax> can drastically affect performance.
+        The values of <MathJax inline hideUntilTypeset={"first"}>{`\\(w_{1}\\)`}</MathJax> and <MathJax inline hideUntilTypeset={"first"}>{`\\(w_{2}\\)`}</MathJax> can drastically affect performance.
         7 different weight configurations were experimented with and 100 games were simulated to a maximum depth of 5 
         to create the distribution below, Where
         the first number is <MathJax inline hideUntilTypeset={"first"}>{`\\(x\\)`}</MathJax>
@@ -86,7 +85,7 @@ function Content(): JSX.Element  {
         for <MathJax inline hideUntilTypeset={"first"}>{`\\(y\\)`}</MathJax>, resulting in an average of only
         38 moves needed to lose the game. A much better result compared to 118.
       </p>
-      <h1 className="text-3xl font-bold p-3">Expectimax</h1>
+      <h1 className="text-3xl font-bold p-3">Tuned Minimax</h1>
     </>
   );
 }

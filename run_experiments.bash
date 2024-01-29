@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ts-node-esm src/scripts/experiments.tsx 
+ts-node --esm -T src/scripts/experiments.tsx 
