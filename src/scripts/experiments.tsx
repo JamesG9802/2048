@@ -1,4 +1,4 @@
-import { minimax, random_move } from "./AntiSolver.tsx";
+import { minimax, minimax_search, random_move } from "./AntiSolver.tsx";
 import { GameInfo, initialize, is_lost, make_move_and_add_tile } from "./GameLogic.tsx";
 
 import fs from "fs";
@@ -62,7 +62,7 @@ function minimax_game_analysis(num_games: number, max_depth: number) {
         if(game % 100 == 0) console.log(game);
         
         while(!is_lost(game_info)) {
-            let evaluation: [number, number] = minimax(game_info, max_depth, true, 0, Number.MIN_VALUE, Number.MAX_VALUE);
+            let evaluation: [number, number] = minimax_search(game_info, max_depth);
             game_info = make_move_and_add_tile(game_info, evaluation[1]);
         }
         data.moves_made.push(game_info.moves_made);
@@ -72,16 +72,9 @@ function minimax_game_analysis(num_games: number, max_depth: number) {
     write_data_to_file(data, './minimax.csv');
 }
 
-/**
- * Uses a gradient descent search to find the locally optimal parameters for minimax.
- * @param num_games 
- * @param max_depth 
- * @param max_generations 
- * @returns an array of numbers representing the weights and bias of the minimax algorithm.
- */
-function tune_minimax_parameters(num_games: number, max_depth: number, max_generations: number): number[] {
-    return [];
+function neural_network_train(num_games: number, max_depth: number, max_generations: number) {
+    
 }
 
 // random_move_game_analysis(100000);
-minimax_game_analysis(1000, 5);
+// minimax_game_analysis(1000, 5);

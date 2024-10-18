@@ -3,6 +3,9 @@ import benh_tiles from './images/benh_tiles.png';
 import random_moves_graph from './images/Random Moves Made.svg'
 import perfect_loss from './images/perfect_loss.png'
 import minmax_moves_graph from './images/Minmax Moves Made.svg'
+import actorcritic_moves_graph from './images/ActorCritic Moves Made.png'
+import github_icon_light from './images/github-mark.svg'
+import github_icon_dark from './images/github-mark-white.svg'
 import { minimax_move, random_move } from "./scripts/AntiSolver";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 
@@ -12,7 +15,7 @@ function Header(): JSX.Element  {
       <h1 className="text-5xl font-bold">
         2048 Anti-solver
       </h1>
-      <h2 className="text-xl">
+      <h2 className="text-xl italic my-2">
         Failing 2048 as fast as possible.
       </h2>
 
@@ -53,10 +56,10 @@ function Content(): JSX.Element  {
         Assuming that you were perfectly lucky, that you need at minimum 12 moves to lose the game.
       </p>
       <img className="p-3" src={perfect_loss}/>
-      <h1 className="text-3xl font-bold p-3">Minmax Approach</h1>
+      <h1 className="text-3xl font-bold p-3">Minimax Approach</h1>
       <p className="text-justify">
         A better approach to finding the fastest loss would be to use a more algorithmic solution. 
-        Minimax is an algorithm that minimizes losing scenarios and maximizes winning scenarios.
+        <a href="https://en.wikipedia.org/wiki/Minimax" target="_blank" rel="noreferrer">Minimax</a> is an algorithm that minimizes losing scenarios and maximizes winning scenarios.
         In our case, a good move is one that reduces the number of empty spaces and minimizes the number of equivalent adjacent tiles.
         The evaluation function can be formally specified as:
       </p>
@@ -83,11 +86,74 @@ function Content(): JSX.Element  {
       <p className="text-justify">
         The best values appear to be 16 for <MathJax inline hideUntilTypeset={"first"}>{`\\(x\\)`}</MathJax> and 1
         for <MathJax inline hideUntilTypeset={"first"}>{`\\(y\\)`}</MathJax>, resulting in an average of only
-        38 moves needed to lose the game. A much better result compared to 118.
+        38 moves needed to lose the game.
+        A much better result when compared to 118.
       </p>
-      <h1 className="text-3xl font-bold p-3">Tuned Minimax</h1>
+      <h1 className="text-3xl font-bold p-3">Reinforcement Learning</h1>
+      <p className="text-justify">
+        The next thing we can try is a machine learning approach.
+        Convolutional Neural Networks (CNNs) are well suited to tasks where they can learn local features from image data.
+        Since a 2048 game board is just a 4x4 grid, we can train a CNN to play the game with the objective of losing as fast as possible. 
+      </p>
+      <p className="text-justify">
+        This class of problem is known as <a href="https://aws.amazon.com/what-is/reinforcement-learning/#:~:text=Reinforcement%20learning%20(RL)%20is%20a,use%20to%20achieve%20their%20goals" target="_blank" rel="noreferrer">Reinforcement Learning</a>, where agents learn to maximize their score in an environment. In this case, it would be trying to complete the 2048 game as fast as possible. 
+        The specific algorithm I decided to use was the <a href="https://huggingface.co/blog/deep-rl-a2c" target="_blank" rel="noreferrer">Advantage Actor-Critic</a> algorithm, a technique that creates and trains two aptly named models: the "actor" and the "critic".
+        The actor chooses a move to interact with the game (sliding up, down, left, or right) and the critic tries to determine how good the actor's move was.
+      </p>
+      <img className="p-3" src={actorcritic_moves_graph}/>
+      <p className="text-justify">
+        After 3,000 games, the model reached an 80 average moves to end the game.
+        By 10,000 games it managed to lower it to 78. However, the performance stagnated by that point, barely reaching an average of 77 moves to end the game by 30,000 games.
+      </p>
+      <p className="text-justify">
+        Compared to the pure algorithmic approaches, machine learning does an okay job at finding a way to end the game, but it is nothing spectatular.
+        The main advantage it has compared to minimax is the vastly improved runtime performance due to not needing to perform repeated deep searches after each move.
+      </p>
     </>
   );
+}
+
+function Source(): JSX.Element {
+  const links = [
+    ["https://play2048.co/", "2048 by Gabriele Cirulli"],
+    ["https://github.com/macroxue/2048-ai", "Data by Hanhong Xue"],
+    ["https://math.stackexchange.com/questions/727076/probability-that-random-moves-in-the-game-2048-will-win/727204#727204", "Data by Benh"],
+    ["https://en.wikipedia.org/wiki/Minimax", "Minimax Algorithm"],
+    ["https://aws.amazon.com/what-is/reinforcement-learning/#:~:text=Reinforcement%20learning%20(RL)%20is%20a,use%20to%20achieve%20their%20goals", "Reinforcement Learning"],
+    ["https://huggingface.co/blog/deep-rl-a2c", "Advantage Actor Critic"],
+  ]
+  return (
+    <>
+      <h1 className="text-3xl font-bold p-3">Sources</h1>
+      <ol className="px-8">
+      {
+        links.map((e)=> {
+          return (
+            <li className="list-decimal"><p className="text-justify">
+              <a href={e[0]} target="_blank" rel="noreferrer">{e[1]}</a>
+            </p></li>
+          )
+        })
+      }
+      </ol>
+    </>
+  )
+}
+
+function Footer(): JSX.Element {
+  return (
+    <>
+      <footer className="rounded-t-lg mt-8 p-4 bg-light-300 dark:bg-dark-300">
+        <p className="text-justify">
+          <a href="https://github.com/JamesG9802/2048" target="_blank" rel="noreferrer">
+          <img className="w-8 h-8 mx-4 inline-block dark:hidden" src={github_icon_light}/>
+          <img className="w-8 h-8 mx-4 hidden dark:inline-block" src={github_icon_dark}/>
+          </a>
+          Made with React + Vite + Tailwind.
+        </p>
+      </footer>
+    </>
+  )
 }
 
 export default function App(): JSX.Element {
@@ -95,8 +161,10 @@ export default function App(): JSX.Element {
     <>
       <MathJaxContext>
       <div id="content" className="max-w-lg mx-auto text-center">
-        <Header></Header>
-        <Content></Content>
+        <Header/>
+        <Content/>
+        <Source/>
+        <Footer/>
       </div>
       </MathJaxContext>
     </>
