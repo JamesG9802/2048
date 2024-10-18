@@ -1,4 +1,4 @@
-import { minimax, minimax_search, random_move } from "./AntiSolver.tsx";
+import { minimax_search, random_move } from "./AntiSolver.tsx";
 import { GameInfo, initialize, is_lost, make_move_and_add_tile } from "./GameLogic.tsx";
 
 import fs from "fs";
@@ -29,7 +29,7 @@ function write_data_to_file(data: Data, file_path: string) {
  * Simulates a number of games of 2048 played randomly.
  * @param num_games 
  */
-function random_move_game_analysis(num_games: number) {
+export function random_move_game_analysis(num_games: number) {
     let data: Data = {moves_made: []};
 
     for(let game = 0; game < num_games; game++) {
@@ -52,7 +52,7 @@ function random_move_game_analysis(num_games: number) {
  * @param num_games 
  * @param max_depth the maximum depth that will be searched
  */
-function minimax_game_analysis(num_games: number, max_depth: number) {
+export function minimax_game_analysis(num_games: number, max_depth: number) {
     let data: Data = {moves_made: []};
     const start: number = performance.now();
     for(let game = 0; game < num_games; game++) {
@@ -70,10 +70,6 @@ function minimax_game_analysis(num_games: number, max_depth: number) {
     const end: number = performance.now();
     console.log(`Time to complete ${num_games} games with max depth of ${max_depth}: ${end - start} milliseconds.`);
     write_data_to_file(data, './minimax.csv');
-}
-
-function neural_network_train(num_games: number, max_depth: number, max_generations: number) {
-    
 }
 
 // random_move_game_analysis(100000);
