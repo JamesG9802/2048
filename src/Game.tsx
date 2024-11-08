@@ -79,18 +79,19 @@ export function GameContainer({move_chooser}: {move_chooser: (game_info: GameInf
             <p className="text-2xl font-bold p-5">Number of moves made: {game_info.moves_made}</p>
 
             <div tabIndex={0} onKeyDown={(e)=>{
-                if(e.key == 'w') {
+                if(e.key == 'w' || e.key == 'ArrowUp') {
                     animated_make_move(game_info, MOVE_UP);
                 }
-                if(e.key == 'a') {
+                if(e.key == 'a' || e.key == 'ArrowLeft') {
                     animated_make_move(game_info, MOVE_LEFT);
                 }
-                if(e.key == 's') {
+                if(e.key == 's' || e.key == 'ArrowDown') {
                     animated_make_move(game_info, MOVE_DOWN);
                 }
-                if(e.key == 'd') {
+                if(e.key == 'd' || e.key == 'ArrowRight') {
                     animated_make_move(game_info, MOVE_RIGHT);
                 }
+                e.preventDefault();
             }}className="game no-select">
                 <div className="game-grid grid grid-cols-4 gap-3 content-center">
                     {board}
